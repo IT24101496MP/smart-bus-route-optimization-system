@@ -1,8 +1,10 @@
 package com.smartbus.service;
 
 import com.smartbus.dto.ApiResponseDTO;
+import com.smartbus.dto.LoginResponseDTO;
 import com.smartbus.dto.UserLoginDTO;
 import com.smartbus.dto.UserRegisterDTO;
+import com.smartbus.entity.Role;
 import com.smartbus.entity.User;
 import com.smartbus.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -33,20 +35,27 @@ public class UserService {
                             "Email already exists"));
         }
 
+        if (!dto.getPassword().equals(dto.getConfirmPassword())) {
+            return ResponseEntity.badRequest()
+                    .body(new ApiResponseDTO(false,
+                            "Passwords do not match"));
+        }
+
         if (!PASSWORD_PATTERN.matcher(dto.getPassword()).matches()) {
 
             return ResponseEntity.badRequest()
                     .body(new ApiResponseDTO(
                             false,
-                            "Password must be 8-15 characters and contain uppercase, lowercase, number and special character"
+                            "Password must contain uppercase, lowercase, number and special character"
                     ));
         }
 
         User user = User.builder()
-                .firstName(dto.getFirstName().trim())
-                .lastName(dto.getLastName().trim())
-                .email(dto.getEmail().trim().toLowerCase())
+                .firstName(dto.getFirstName())
+                .lastName(dto.getLastName())
+                .email(dto.getEmail().toLowerCase())
                 .password(passwordEncoder.encode(dto.getPassword()))
+                .role(Role.USER)
                 .build();
 
         userRepository.save(user);
@@ -58,37 +67,38 @@ public class UserService {
                 ));
     }
 
-    public ResponseEntity<ApiResponseDTO> login(UserLoginDTO dto) {
+    public ResponseEntity<LoginResponseDTO> login(UserLoginDTO dto) {
 
         User user = userRepository.findByEmail(
-                dto.getEmail().trim().toLowerCase()
+                dto.getEmail().toLowerCase()
         ).orElse(null);
 
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ApiResponseDTO(
-                            false,
-                            "Invalid email"
-                    ));
+                    .body(LoginResponseDTO.builder()
+                            .success(false)
+                            .message("Invalid email")
+                            .build());
         }
 
         if (!passwordEncoder.matches(
                 dto.getPassword(),
-                user.getPassword()
-        )) {
+                user.getPassword())) {
 
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(new ApiResponseDTO(
-                            false,
-                            "Incorrect password"
-                    ));
+                    .body(LoginResponseDTO.builder()
+                            .success(false)
+                            .message("Incorrect password")
+                            .build());
         }
 
         return ResponseEntity.ok(
-                new ApiResponseDTO(
-                        true,
-                        "Login successful"
-                )
+                LoginResponseDTO.builder()
+                        .success(true)
+                        .message("Login successful")
+                        .userId(user.getId())
+                        .role(user.getRole().name())
+                        .build()
         );
     }
 }
