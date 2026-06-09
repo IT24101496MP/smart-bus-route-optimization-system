@@ -20,15 +20,6 @@ public class PassengerController {
             @RequestBody PassengerLogDTO dto
     ) {
 
-        if (dto.getUserId() == null) {
-
-            return ResponseEntity.badRequest()
-                    .body(new ApiResponseDTO(
-                            false,
-                            "User id is required"
-                    ));
-        }
-
         if (dto.getBusId() == null) {
 
             return ResponseEntity.badRequest()
@@ -45,15 +36,6 @@ public class PassengerController {
     public ResponseEntity<?> exitBus(
             @RequestBody PassengerLogDTO dto
     ) {
-
-        if (dto.getUserId() == null) {
-
-            return ResponseEntity.badRequest()
-                    .body(new ApiResponseDTO(
-                            false,
-                            "User id is required"
-                    ));
-        }
 
         if (dto.getBusId() == null) {
 
