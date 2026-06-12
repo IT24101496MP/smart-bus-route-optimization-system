@@ -134,11 +134,23 @@ export default function Register({ onNavigate }) {
               />
               <button
                 type="button"
-                className={`password-toggle-btn ${showPassword ? 'visible' : 'hidden'}`}
+                className="password-toggle-btn"
                 onClick={() => setShowPassword(!showPassword)}
-                aria-label="Toggle password visibility"
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
               >
-                <span className="eye-icon" aria-hidden="true" />
+                {showPassword ? (
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <path d="M17.94 17.94A10.94 10.94 0 0 1 12 20.5C7.05 20.5 2.73 17.28 1 12.5a10.94 10.94 0 0 1 1.85-2.87" />
+                    <path d="M1 1l22 22" />
+                    <path d="M9.53 9.53a3.5 3.5 0 0 0 4.95 4.95" />
+                    <path d="M14.12 14.12A3.5 3.5 0 0 1 9.88 9.88" />
+                  </svg>
+                ) : (
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <path d="M1 12.5C2.73 17.28 7.05 20.5 12 20.5s9.27-3.22 11-8c-1.73-4.78-6.05-8-11-8S2.73 7.72 1 12.5z" />
+                    <circle cx="12" cy="12.5" r="3.5" />
+                  </svg>
+                )}
               </button>
             </div>
           </label>
@@ -162,16 +174,28 @@ export default function Register({ onNavigate }) {
                 type={showConfirmPassword ? 'text' : 'password'}
                 value={form.confirmPassword}
                 onChange={handleChange('confirmPassword')}
-                placeholder="e.g. John"
+                placeholder="Confirm your password"
                 required
               />
               <button
                 type="button"
-                className={`password-toggle-btn ${showConfirmPassword ? 'visible' : 'hidden'}`}
+                className="password-toggle-btn"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                aria-label="Toggle confirm password visibility"
+                aria-label={showConfirmPassword ? 'Hide confirm password' : 'Show confirm password'}
               >
-                <span className="eye-icon" aria-hidden="true" />
+                {showConfirmPassword ? (
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <path d="M17.94 17.94A10.94 10.94 0 0 1 12 20.5C7.05 20.5 2.73 17.28 1 12.5a10.94 10.94 0 0 1 1.85-2.87" />
+                    <path d="M1 1l22 22" />
+                    <path d="M9.53 9.53a3.5 3.5 0 0 0 4.95 4.95" />
+                    <path d="M14.12 14.12A3.5 3.5 0 0 1 9.88 9.88" />
+                  </svg>
+                ) : (
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <path d="M1 12.5C2.73 17.28 7.05 20.5 12 20.5s9.27-3.22 11-8c-1.73-4.78-6.05-8-11-8S2.73 7.72 1 12.5z" />
+                    <circle cx="12" cy="12.5" r="3.5" />
+                  </svg>
+                )}
               </button>
             </div>
           </label>
